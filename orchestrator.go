@@ -9,23 +9,20 @@ import (
 type Strategy string
 
 const (
-	Linear      Strategy = "LINEAR"
+	Uniform     Strategy = "UNIFORM"
 	Exponential Strategy = "Exponential"
 	Random      Strategy = "RANDOM"
 )
 
-type LoadRequest struct {
-	ReqTotal int
-	Time     string
-	Strategy Strategy
-	Request
-}
-
 func InitLoad(request LoadRequest) {
 	var metricArray *[]*RequestMetric
 	startTime := time.Now()
+	if request.Strategy == "" {
+		request.Strategy = Uniform
+	}
+
 	switch request.Strategy {
-	case Linear:
+	case Uniform:
 		metricArray, _ = SimulateLinearLoad(request)
 	default:
 		metricArray, _ = SimulateLinearLoad(request)

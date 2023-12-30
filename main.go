@@ -1,16 +1,25 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"github.com/go-playground/validator/v10"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+)
 
 func main() {
-	InitLoad(LoadRequest{
-		ReqTotal: 200,
-		Strategy: Linear,
-		Time:     "60s",
-		Request: Request{
-			URL:    "https://vaibhtest.requestcatcher.com/test",
-			Method: http.MethodGet,
-			Body:   nil,
-		},
-	})
+	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Custom validator
+	e.Validator = &CustomValidator{validator: validator.New()}
+	registerHandlers(e)
+	err := e.Start(":8090")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }

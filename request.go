@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"crypto/tls"
 	"log"
@@ -10,22 +9,6 @@ import (
 	"time"
 )
 
-type RequestMetric struct {
-	connectDuration int64
-	timeToFirstByte int64
-	tlsDuration     int64
-	totalDuration   int64
-	dnsDuration     int64
-	statusCode      int
-	startTime       time.Time
-}
-
-type Request struct {
-	URL    string
-	Method string
-	Body   []byte
-}
-
 func makeRequest(request Request) (*RequestMetric, error) {
 	var req *http.Request
 	startTime := time.Now()
@@ -33,8 +16,6 @@ func makeRequest(request Request) (*RequestMetric, error) {
 	case http.MethodGet:
 		req, _ = http.NewRequest(request.Method, request.URL, nil)
 	case http.MethodPost:
-		reader := bytes.NewReader(request.Body)
-		req, _ = http.NewRequest(request.Method, request.URL, reader)
 	default:
 		//return nil, errors.New("method not supported yet")
 	}
