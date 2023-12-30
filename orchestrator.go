@@ -33,12 +33,8 @@ func InitLoad(request LoadRequest) {
 	default:
 		metricArray, _ = SimulateUniformLoad(request)
 	}
-
 	generateChart(generateChartData(*metricArray, startTime))
-	for _, val := range *metricArray {
-		fmt.Printf("startTime - %v    latency- %v \n", val.startTime.Sub(startTime).Milliseconds(), val.totalDuration)
-	}
-
+	fmt.Printf("done!!")
 }
 
 func generateChartData(metricArray []*RequestMetric, startTime time.Time) ([]string, []SeriesData) {
